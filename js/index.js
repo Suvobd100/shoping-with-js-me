@@ -68,20 +68,20 @@ document.getElementById('btn-third-card').addEventListener('click', function () 
 document.getElementById('btn-fourth-card').addEventListener('click', function () {
     serialNo = serialNo + 1;
     
-    // get data rom html
+    // get data from html
     const productName = document.getElementById('fourth-name').innerText;
     const productPrice = document.getElementById('fourth-price').innerText;
     const productQuantity = document.getElementById('fourth-quantity').innerText;
+    
     // calculation divided
-    const productTotalPriceFloat = parseInt(productPrice) / parseInt(productQuantity);
-    
-    // const productTotalPrice = parseFloat(productTotalPriceFloat).toFixed(2);
+    const productTotalPriceFloat =productPrice/productQuantity;
     const productTotalStr=parseFloat(productTotalPriceFloat).toFixed(2);
-    const productTotalPrice=parseInt(productTotalStr);
     
+    const productTotalPrice=parseFloat(productTotalStr);
+    // console.log(typeof productTotalPrice);
     tp=tp+productTotalPrice;
     
-    // grand total
+   
 
 
     displayData(serialNo, productName, productPrice, productQuantity, productTotalPrice);
@@ -95,44 +95,83 @@ document.getElementById('btn-fifth-card').addEventListener('click', function () 
     // get data rom html
     const productName = document.getElementById('fifth-name').innerText;
     // const productPrice=document.getElementById('fifth-price').value;
-    const productPrice = getElementValue('fifth-price');
+    const productPriceStr = getElementValue('fifth-price');
+    const productPrice=parseInt(productPriceStr);
+    console.log(typeof productPrice);
+    if (isNaN(productPrice)){
+        alert('Invalid input');
+
+     // clear the input field
+     document.getElementById('fifth-price').value = '';
+     document.getElementById('fifth-quantity').value = '';    
+        
+     return;
+
+    }
+    else {
     // const productQuantity=document.getElementById('fifth-quantity').value;
     const productQuantity = getElementValue('fifth-quantity');
-    // console.log(typeof productQuantity);
+    
     // calculation minus
     const productTotalPrice = parseInt(productPrice) - parseInt(productQuantity);
-    // const productTotalPrice = productTotalPriceFloat;
-    tp=tp+productTotalPrice;
-    document.getElementById('grand-total').innerText=tp;
-    document.getElementById('no-of-product').innerText=serialNo;
     
+    tp=tp+productTotalPrice;
+    
+
+    // display in table 
     displayData(serialNo, productName, productPrice, productQuantity, productTotalPrice);
     // clear text field
     document.getElementById('fifth-price').value = '';
     document.getElementById('fifth-quantity').value = '';
 
     disableButton('btn-fifth-card');
+    }
 });
 
+// calculation btn of show grand total and serial
+document.getElementById('btn-calculation').addEventListener('click',function(){
+
+    document.getElementById('grand-total').innerText=tp;
+    // setInnerText('grand-total')=tp;
+    document.getElementById('no-of-product').innerText=serialNo;
+    disableButton('btn-calculation');
+  
+});
+
+// discount calculation
+
+document.getElementById('btn-discount').addEventListener('click',function(){
+   
+    const promocode=document.getElementById('promo-code').value;
+    // const promocode=setInnerText('promo-code');
+    console.log(promocode) ;
+    const grandTotalPriceStr=document.getElementById('grand-total').innerText;
+    const gTotal= parseInt(grandTotalPriceStr) ;
+    
+    if (promocode==10){
+        const discountValue=gTotal*.10;
+        const disCountPrice= gTotal - discountValue;
+        
+        document.getElementById('discount').innerText=disCountPrice+' /- Taka';
+        
+        disableButton('btn-discount');
+        }
+    else{
+        alert('Invalid Discount Code')};
+
+})
 
 // set innerText
 function setInnerText(id) {
     return document.getElementById(id).innerText;
 
-}
+};
 // set value
 function getElementValue(id) {
     const elementValue = document.getElementById(id).value;
     return elementValue;
 
-}
-
-// function grandTotal() {
-//     const gt=tp+productTotalPrice;
-//     console.log(gt);
-//     return gt;
-// }
-
+};
 
 // display function common
 
@@ -153,31 +192,9 @@ function displayData(serialNo, productName, productPrice, productQuantity,produc
     
 
 };
-// const tblData = document.querySelector('table-container');
-// console.log(tblData);
+
 
 function disableButton(id) {
     document.getElementById(id).setAttribute('disabled', true)
         ;
 }
-
-// discount
-
-document.getElementById('btn-discount').addEventListener('click',function(){
-   
-    const promocode=document.getElementById('promo-code').value;
-    
-    const grandTotalPriceStr=document.getElementById('grand-total').innerText;
-    const gTotal= parseInt(grandTotalPriceStr) ;
-    
-    if (promocode==10){
-        const discountValue=gTotal*.10;
-        const disCountPrice= gTotal - discountValue;
-        
-        document.getElementById('discount').innerText=disCountPrice+' /- Taka';
-        
-        }
-    else{
-        alert('Invalid Discount Code')};
-
-})
